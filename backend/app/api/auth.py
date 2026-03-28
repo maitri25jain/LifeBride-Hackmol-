@@ -18,6 +18,7 @@ from app.schemas.auth import (
     CitizenAuthResponse,
 )
 
+
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 

@@ -8,7 +8,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_HOURS: int = 24
 
-    MONGO_URL: str = "mongodb://localhost:27017"
+    web3_provider_uri:  str = "http://172.24.144.1:8545"
+    server_private_key: str = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    CONTRACT_ADDRESS: str = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+
+
+    MONGO_URL: str = "mongodb+srv://Lifebridge:<db_password>@cluster0.ujxfqdm.mongodb.net/?appName=Cluster0"
     MONGO_DB_NAME: str = "lifebridge"
 
     MATCHING_ENGINE_URL: str = "http://localhost:8001"

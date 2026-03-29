@@ -1,9 +1,11 @@
 from pydantic import BaseModel
+from pydantic import ConfigDict
 from typing import Optional, List, Dict
 from datetime import datetime, date
 
 # --- ORGAN MODELS ---
 class DonorOrgan(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     donor_id: str
     organ_type: str  # "HEART", "KIDNEYS", etc.
     blood_group: str
@@ -14,6 +16,7 @@ class DonorOrgan(BaseModel):
     donor_weight: float
 
 class Recipient(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: str
     blood_group: str
     hla_typing: Dict[str, List[str]]
@@ -27,6 +30,7 @@ class Recipient(BaseModel):
     pra_level: float
 
 class OrganMatchResult(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     recipient_id: str
     total_score: float
     distance_km: float
@@ -36,6 +40,7 @@ class OrganMatchResult(BaseModel):
 
 # --- BLOOD MODELS ---
 class BloodEmergencyRequest(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     emergency_id: str
     hospital_lat: float
     hospital_lon: float
@@ -43,6 +48,7 @@ class BloodEmergencyRequest(BaseModel):
     radius_km: float
 
 class BloodDonor(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: str
     blood_group: str
     lat: float
@@ -50,6 +56,7 @@ class BloodDonor(BaseModel):
     last_donation_date: Optional[date] = None
 
 class BloodMatchResult(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     donor_id: str
     distance_km: float
-    is_eligible: bool
+    is_eligible: bool

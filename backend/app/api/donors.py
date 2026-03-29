@@ -152,21 +152,18 @@ def run_organ_match(
     for r in recipients:
         hosp = hospitals.get(r["hospital_id"], {})
         recipients_payload.append({
-            "id":                   r["_id"],
-            "blood_group":          r["blood_type"],
-            "hla_typing":           r.get("hla_typing", {}),
-            "organ_needed":         r["organ_needed"].upper(),
-            # Matching engine requires CRITICAL/URGENT/STANDARD (uppercase)
-            "urgency":              r["urgency_level"].upper(),
-            "hospital_id":          r["hospital_id"],
-            "hospital_name":        hosp.get("name", "Unknown"),
-            "hospital_lat":         hosp.get("location_lat", 28.6139),
-            "hospital_lon":         hosp.get("location_lng", 77.2090),
-            "waitlist_days":        r.get("waitlist_days", 0),
-            "age":                  r["age"],
-            "weight":               r.get("weight", 60.0),
-            "pra_level":            r.get("pra_level", 0.0),
-            "previous_transplants": r.get("previous_transplants", 0),
+            # Only fields the AI engine Recipient model accepts:
+            "id":           r["_id"],
+            "blood_group":  r["blood_type"],
+            "hla_typing":   r.get("hla_typing", {}),
+            "organ_needed": r["organ_needed"].upper(),
+            "urgency":      r["urgency_level"].upper(),
+            "hospital_id":  r["hospital_id"],
+            "hospital_lat": hosp.get("location_lat", 28.6139),
+            "hospital_lon": hosp.get("location_lng", 77.2090),
+            "waitlist_days": r.get("waitlist_days", 0),
+            "weight":        r.get("weight", 60.0),
+            "pra_level":     r.get("pra_level", 0.0),
         })
 
     # ── Step 5: For each donor organ → call matching engine ──────
@@ -338,14 +335,20 @@ def run_blood_match(
     # ── Build BloodDonor list for matching engine ─────────────────
     blood_donors_payload = []
     for citizen in citizens:
-        coords = citizen.get("location", {}).get("coordinates", [77.2090, 28.6139])
+        raw_loc = citizen.get("location")  # stored as None if not set
+        # Guard: location may be None (not just missing) for citizens without GPS
+        coords = (
+            raw_loc.get("coordinates", [77.2090, 28.6139])
+            if isinstance(raw_loc, dict)
+            else [77.2090, 28.6139]
+        )
         # BloodDonor model only accepts: id, blood_group, lat, lon, last_donation_date
         blood_donors_payload.append({
             "id":                 citizen["_id"],
             "blood_group":        citizen["blood_type"],
             "lat":                coords[1],   # GeoJSON is [lon, lat] so index 1 is lat
             "lon":                coords[0],   # index 0 is lon
-            "last_donation_date": None,        # citizens don't track this yet
+            "last_donation_date": None,
         })
 
     # ── For each alert → call matching engine ────────────────────

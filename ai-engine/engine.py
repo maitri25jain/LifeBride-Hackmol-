@@ -43,7 +43,13 @@ def rank_organ_recipients(donor, recipients):
 
         # Viability Check
         max_hours = VIABILITY_HOURS.get(donor.organ_type, 12)
-        elapsed_mins = (datetime.now(timezone.utc) - donor.harvest_time).total_seconds() / 60
+        # harvest_time may arrive as timezone-naive; assume UTC if so
+        harvest_utc = (
+            donor.harvest_time.replace(tzinfo=timezone.utc)
+            if donor.harvest_time.tzinfo is None
+            else donor.harvest_time
+        )
+        elapsed_mins = (datetime.now(timezone.utc) - harvest_utc).total_seconds() / 60
         remaining_mins = (max_hours * 60) - elapsed_mins
         is_feasible = transport_mins < remaining_mins
 

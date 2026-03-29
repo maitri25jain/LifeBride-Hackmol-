@@ -100,6 +100,32 @@ export default function HospitalLogin() {
               )}
             </button>
           </form>
+
+          <div
+            className="mt-5 p-3 rounded-lg text-xs"
+            style={{
+              background: 'var(--blue-glow)',
+              border: '1px solid rgba(59,130,246,0.15)',
+            }}
+          >
+            <span className="font-semibold font-display" style={{ color: 'var(--blue-400)' }}>
+              Demo Credentials
+            </span>
+            <div className="mt-1.5 space-y-1" style={{ color: 'var(--text-secondary)' }}>
+              <p>
+                AIIMS Admin:{' '}
+                <span className="font-mono">admin@aiims.edu / Admin@123</span>
+              </p>
+              <p>
+                AIIMS Coordinator:{' '}
+                <span className="font-mono">coordinator@aiims.edu / Coord@123</span>
+              </p>
+              <p>
+                Fortis Coordinator:{' '}
+                <span className="font-mono">coordinator@fortis.com / Coord@123</span>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
